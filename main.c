@@ -3,13 +3,14 @@
 #include <string.h>
 
 #define MAX_USERNAME 10
+#define MAX_PWD 10
 
 //Login struct
 typedef struct {
 int code;
 char fullName[20];
 char username[MAX_USERNAME];
-char password[20];
+char password[MAX_PWD];
 
 }login;
 
@@ -22,12 +23,14 @@ int main(void){
     char username[MAX_USERNAME],password[20];
     int option;
     //Main Menu
-    printf("Login System \n");
-    printf("Create User (1) \t Login (2) \n");
-    scanf("%d",&option);
-    getchar(); // Consume the newline character put by scanf to use fgets later
-    if(option == 1){
-    //SignUp
+    printf("\t \t \t \t Login System \n");
+    
+    do{
+	printf("\t \t (1) Create User \t (2) Login \t  (3) Exit \n");
+	scanf("%d",&option);
+	getchar();
+	if(option == 1){
+    //Create User
     printf("Enter code : \n");
     scanf("%d",&login.code);
     getchar(); // Consume the newline character put by scanf to use fgets later
@@ -41,11 +44,11 @@ int main(void){
     printf("New account created\n");
     }
     else if(option == 2){
-    //Sign in
+    //Login
     printf("Login \n");
-    printf("Enter username :  \n");
+    printf("Enter username : ");
     fgets(username,sizeof(username),stdin);
-    printf("Enter Password :  \n");
+    printf("Enter Password : ");
     fgets(password,sizeof(password),stdin);
     int found=0;
     while(fread(&login, sizeof(login) , 1 , file_read)){
@@ -64,11 +67,15 @@ int main(void){
     }
     }
     if (found != 1)
-    printf("No account for username : %s !\n",username);
+    printf("No account for username : %s!  \n",username);
     }
-    else
-    printf("Option error\n");
 
+    else if(option == 3){
+	printf("Quiting ... \n");
+	}
+	else 
+	printf("Non valid option , please chose 1,2,3 \n");
+	}while (option != 3);
     fclose(file_append);
     fclose(file_read);
 

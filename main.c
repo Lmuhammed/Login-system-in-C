@@ -14,6 +14,17 @@ char password[MAX_PWD];
 
 }login;
 
+int is_file_empty(FILE *file) {
+    if (file == NULL) {
+        perror("Error opening file");
+        return -1; 
+    }
+    fseek(file, 0, SEEK_END); 
+    long size = ftell(file); 
+
+    return size == 0;
+}
+
 int main(void){
 
     FILE *file_append=fopen("login","a");
@@ -24,7 +35,6 @@ int main(void){
     int option;
     //Main Menu
     printf("\t \t \t \t Login System \n");
-    
     do{
 	printf("\t \t (1) Create User \t (2) Login \t  (3) Exit \n");
 	scanf("%d",&option);
@@ -45,6 +55,10 @@ int main(void){
     }
     else if(option == 2){
     //Login
+    if (is_file_empty(file_read)) {
+        printf("No accounts Yet , Create one ! \n");
+        continue;
+    }
     printf("Login \n");
     printf("Enter username : ");
     fgets(username,sizeof(username),stdin);

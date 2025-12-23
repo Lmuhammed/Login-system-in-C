@@ -1,11 +1,10 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #define MAX_USERNAME 10
 #define MAX_PWD 10
 
-//Login struct
 typedef struct {
 int code;
 char fullName[20];
@@ -13,6 +12,49 @@ char username[MAX_USERNAME];
 char password[MAX_PWD];
 
 }login;
+
+int is_file_empty(FILE *file);
+void create_user(login login , FILE * file_append);
+void user_login(login login , FILE * file_read);
+
+int main(void){
+
+    FILE *file_append=fopen("login","a");
+    FILE *file_read=fopen("login","r");
+    login login;
+    char username[MAX_USERNAME],password[MAX_PWD];
+    int option;
+
+    //Main Menu
+    printf("\t \t \t \t Login System \n");
+    do{
+	printf("\t \t (1) Create User \t (2) Login \t  (3) Exit \n");
+	scanf("%d",&option);
+	getchar();
+	if(option == 1){
+    //Create User
+    create_user(login ,file_append);
+    }
+    else if(option == 2){
+    //Login
+    if (is_file_empty(file_read)) {
+        printf("No accounts Yet , Create one ! \n");
+        continue;
+    }
+   user_login(login ,file_read);
+    }
+
+    else if(option == 3){
+	printf("Quiting ... \n");
+	}
+	else 
+	printf("Non valid option , please chose 1,2,3 \n");
+	}while (option != 3);
+    fclose(file_append);
+    fclose(file_read);
+
+return 0;
+}
 
 int is_file_empty(FILE *file) {
     if (file == NULL) {
@@ -25,22 +67,8 @@ int is_file_empty(FILE *file) {
     return size == 0;
 }
 
-int main(void){
-
-    FILE *file_append=fopen("login","a");
-    FILE *file_read=fopen("login","r");
-    login login;
-
-    char username[MAX_USERNAME],password[20];
-    int option;
-    //Main Menu
-    printf("\t \t \t \t Login System \n");
-    do{
-	printf("\t \t (1) Create User \t (2) Login \t  (3) Exit \n");
-	scanf("%d",&option);
-	getchar();
-	if(option == 1){
-    //Create User
+void create_user(login login , FILE * file_append){
+    //char username[MAX_USERNAME],password[MAX_PWD];
     printf("Enter code : \n");
     scanf("%d",&login.code);
     getchar(); // Consume the newline character put by scanf to use fgets later
@@ -52,13 +80,10 @@ int main(void){
     fgets(login.password,sizeof(login.password),stdin);
     fwrite(&login, sizeof(login) , 1 , file_append);
     printf("New account created\n");
-    }
-    else if(option == 2){
-    //Login
-    if (is_file_empty(file_read)) {
-        printf("No accounts Yet , Create one ! \n");
-        continue;
-    }
+}
+
+void user_login(login login , FILE * file_read){
+    char username[MAX_USERNAME],password[MAX_PWD];
     printf("Login \n");
     printf("Enter username : ");
     fgets(username,sizeof(username),stdin);
@@ -82,17 +107,5 @@ int main(void){
     }
     if (found != 1)
     printf("No account for username : %s!  \n",username);
-    }
 
-    else if(option == 3){
-	printf("Quiting ... \n");
-	}
-	else 
-	printf("Non valid option , please chose 1,2,3 \n");
-	}while (option != 3);
-    fclose(file_append);
-    fclose(file_read);
-
-return 0;
 }
-

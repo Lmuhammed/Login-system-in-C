@@ -23,7 +23,7 @@ int main(void){
     FILE *file_append=fopen("login","a");
     FILE *file_read=fopen("login","r");
     login login;
-    char username[MAX_USERNAME],password[MAX_PWD];
+    //char username[MAX_USERNAME],password[MAX_PWD];
     int option;
 
     //Main Menu
@@ -122,8 +122,8 @@ int read_int (char * msg){
     x = (int)strtol(buf, &end, 10);
 
     if (end == buf) {
-        printf("Invalid integer\n");
-        return 1;
+        fprintf(stderr,"ERROR : Please enter a valid integer \n");
+        exit(-1);
     }
 
     return x;

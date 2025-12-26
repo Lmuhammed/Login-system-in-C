@@ -1,8 +1,16 @@
-# Makefile
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -std=c99
 
-program: main.c 
-	gcc -o "LoginSystem"  main.c 
+TARGET = LoginSystem
+SRC = main.c
+
+all: $(TARGET)
+
+$(TARGET): $(SRC)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
+
+run: $(TARGET)
+	./$(TARGET)
 
 clean:
-	rm -f  LoginSystem login
-
+	rm -f $(TARGET)

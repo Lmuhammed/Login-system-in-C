@@ -16,6 +16,7 @@ char password[MAX_PWD];
 int is_file_empty(FILE *file);
 void create_user(login login , FILE * file_append);
 void user_login(login login , FILE * file_read);
+int read_int (char * msg);
 
 int main(void){
 
@@ -28,10 +29,8 @@ int main(void){
     //Main Menu
     printf("\t \t \t \t Login System \n");
     do{
-	printf("\t \t (1) Create User \t (2) Login \t  (3) Exit \n");
-	scanf("%d",&option);
-	getchar();
-	if(option == 1){
+    option=read_int("\t \t (1) Create User \t (2) Login \t  (3) Exit \n");
+    if(option == 1){
     //Create User
     create_user(login ,file_append);
     }
@@ -68,13 +67,10 @@ int is_file_empty(FILE *file) {
 }
 
 void create_user(login login , FILE * file_append){
-    //char username[MAX_USERNAME],password[MAX_PWD];
-    printf("Enter code : \n");
-    scanf("%d",&login.code);
-    getchar(); // Consume the newline character put by scanf to use fgets later
+    login.code=read_int("Enter code : \n");
     printf("Full name : \n");
     fgets(login.fullName,sizeof(login.fullName),stdin);
-    printf("username :  \n");
+    printf("Username :  \n");
     fgets(login.username,sizeof(login.username),stdin);
     printf("Password :  \n");
     fgets(login.password,sizeof(login.password),stdin);
@@ -108,4 +104,27 @@ void user_login(login login , FILE * file_read){
     if (found != 1)
     printf("No account for username : %s!  \n",username);
 
+}
+
+int read_int (char * msg){
+
+    char buf[100];
+    char *end;
+    int x;
+
+    //To pass input message (optional) 
+    if (msg != NULL)
+    printf("%s",msg);
+
+    if (fgets(buf, sizeof(buf), stdin) == NULL)
+        return 1;
+
+    x = (int)strtol(buf, &end, 10);
+
+    if (end == buf) {
+        printf("Invalid integer\n");
+        return 1;
+    }
+
+    return x;
 }

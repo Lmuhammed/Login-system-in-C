@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdbool.h>
+
 
 #define MAX_USERNAME 10
 #define MAX_PWD 10
@@ -13,7 +15,8 @@ char password[MAX_PWD];
 
 }login;
 
-int is_file_empty(FILE *file);
+void error_msg(char *msg);
+bool is_file_empty(FILE *file);
 void create_user(login login , FILE * file_append);
 void user_login(login login , FILE * file_read);
 int read_int (char * msg);
@@ -55,7 +58,12 @@ int main(void){
 return 0;
 }
 
-int is_file_empty(FILE *file) {
+void error_msg(char *msg){
+    fprintf(stderr,"ERROR : %s",msg);
+    exit(-1);
+}
+
+bool is_file_empty(FILE *file) {
     if (file == NULL) {
         perror("Error opening file");
         return -1; 
@@ -97,34 +105,30 @@ void user_login(login login , FILE * file_read){
     }
     //Wrong password
     else{
-    printf("Wrong password for username : %s ,Retry ...\n",username);
+    error_msg("Wrong password \n");
+    //printf("Wrong password for username : %s ,Retry ...\n",username);
     }
     }
     }
     if (found != 1)
-    printf("No account for username : %s!  \n",username);
+    error_msg("No account found \n");
+    //printf("No account for username : %s!  \n",username);
 
 }
 
 int read_int (char * msg){
-
     char buf[100];
     char *end;
     int x;
-
     //To pass input message (optional) 
     if (msg != NULL)
     printf("%s",msg);
-
     if (fgets(buf, sizeof(buf), stdin) == NULL)
         return 1;
-
     x = (int)strtol(buf, &end, 10);
-
-    if (end == buf) {
-        fprintf(stderr,"ERROR : Please enter a valid integer \n");
-        exit(-1);
-    }
-
+    if (end == buf)
+    error_msg("Please enter a valid integer \n");
+        //fprintf(stderr,"ERROR : Please enter a valid integer \n");
+        //exit(-1);
     return x;
 }

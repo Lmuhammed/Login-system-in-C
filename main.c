@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-
 #define MAX_USERNAME 10
 #define MAX_PWD 10
 
@@ -23,8 +22,12 @@ int read_int (char * msg);
 
 int main(void){
 
-    FILE *file_append=fopen("login","a");
-    FILE *file_read=fopen("login","r");
+    char *file_name="login";
+    FILE *file_append=fopen(file_name,"ab");
+    FILE *file_read=fopen(file_name,"rb");
+    if (file_append == NULL || file_read == NULL ){
+     error_msg("file processing failed");
+    }
     login login;
     //char username[MAX_USERNAME],password[MAX_PWD];
     int option;

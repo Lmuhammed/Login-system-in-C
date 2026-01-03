@@ -97,6 +97,7 @@ void user_login(login login , FILE * file_read){
     printf("Enter Password : ");
     fgets(password,sizeof(password),stdin);
     int found=0;
+   rewind(file_read);
     while(fread(&login, sizeof(login) , 1 , file_read)){
     //check if username found
     if(strcmp(username,login.username)== 0){

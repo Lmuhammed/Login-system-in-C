@@ -17,7 +17,7 @@ char password[MAX_PWD];
 void error_msg(char *msg);
 bool is_file_empty(FILE *file);
 void create_user(login login , FILE * file_append);
-void user_login(login login , FILE * file_read);
+bool user_login(login login , FILE * file_read);
 int read_int (char * msg);
 
 int main(void){
@@ -46,7 +46,14 @@ int main(void){
         printf("No accounts Yet , Create one ! \n");
         continue;
     }
-   user_login(login ,file_read);
+    bool user_found = user_login(login ,file_read);
+    if (user_found) {
+        printf("Login succses , welcome\n");
+        option = 3;
+    }else {
+    printf("No account found\n");
+    continue;
+    }
     }
 
     else if(option == 3){
@@ -89,7 +96,7 @@ void create_user(login login , FILE * file_append){
     printf("New account created\n");
 }
 
-void user_login(login login , FILE * file_read){
+bool user_login(login login , FILE * file_read){
     char username[MAX_USERNAME],password[MAX_PWD];
     printf("Login \n");
     printf("Enter username : ");
@@ -102,22 +109,14 @@ void user_login(login login , FILE * file_read){
     //check if username found
     if(strcmp(username,login.username)== 0){
     //check if password correct
-    found=1;
     if(strcmp(password,login.password)== 0){
-    printf("Login succses , welcome : %s\n",login.fullName);
+    found=1;
     break;
     }
-    //Wrong password
-    else{
-    error_msg("Wrong password \n");
-    //printf("Wrong password for username : %s ,Retry ...\n",username);
     }
     }
-    }
-    if (found != 1)
-    error_msg("No account found \n");
-    //printf("No account for username : %s!  \n",username);
-
+    
+    return found == 1;
 }
 
 int read_int (char * msg){

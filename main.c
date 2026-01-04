@@ -2,12 +2,13 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 #define MAX_USERNAME 10
 #define MAX_PWD 10
 
 struct User {
-int code;
+int id;
 char fullName[20];
 char username[MAX_USERNAME];
 char password[MAX_PWD];
@@ -16,10 +17,11 @@ char password[MAX_PWD];
 
 void error_msg(char *msg);
 bool is_file_empty(FILE *file);
-void create_user(FILE * file_append);
+void create_user(FILE * file_append,FILE * file_read);
 bool login(FILE * file_read);
 int read_int (char * msg);
 int generate_id (void);
+bool is_id_unique(int id,FILE * file_read);
 
 int main(void){
 
@@ -36,7 +38,7 @@ int main(void){
     option=read_int("\t \t (1) Create User \t (2) Login \t  (3) Exit \n");
     if(option == 1){
     //Create User
-    create_user(file_append);
+    create_user(file_append,file_read);
     }
     else if(option == 2){
     //Login
@@ -82,9 +84,15 @@ bool is_file_empty(FILE *file) {
     return size == 0;
 }
 
-void create_user(FILE * file_append){
+void create_user(FILE * file_append,FILE * file_read){
     struct User u;
-    u.code=read_int("Enter code : \n");
+    //u.id=read_int("Enter id : \n");
+    bool id_unique= false;
+    do{
+    u.id=generate_id();
+    id_unique=is_id_unique(u.id,file_read);
+    }while(id_unique == false);
+
     printf("Full name : \n");
     fgets(u.fullName,sizeof(u.fullName),stdin);
     printf("Username :  \n");
@@ -104,7 +112,7 @@ bool login(FILE * file_read){
     printf("Enter Password : ");
     fgets(password,sizeof(password),stdin);
     int found=0;
-   rewind(file_read);
+    rewind(file_read);
     while(fread(&u, sizeof(u) , 1 , file_read)){
     //check if username found
     if(strcmp(username,u.username)== 0){
@@ -137,8 +145,21 @@ int read_int (char * msg){
 
 int generate_id (void){
 srand(time(NULL));
-int id=(rand()%1001));
+int id=(rand()%1001);
+return id;
 }
 
+bool is_id_unique(int id,FILE * file_read){
+ int found=0;
+ struct User u;
+ rewind(file_read);
+ while(fread(&u, sizeof(u) , 1 , file_read)){
+    if(u.id == id){
+    found =1;
+    break;
+    }
+    }
+    return found == 0;
+}
 
 

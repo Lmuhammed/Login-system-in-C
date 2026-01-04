@@ -19,6 +19,7 @@ bool is_file_empty(FILE *file);
 void create_user(FILE * file_append);
 bool login(FILE * file_read);
 int read_int (char * msg);
+int generate_id (void);
 
 int main(void){
 
@@ -133,3 +134,11 @@ int read_int (char * msg){
         //exit(-1);
     return x;
 }
+
+int generate_id (void){
+srand(time(NULL));
+int id=(rand()%1001));
+}
+
+
+

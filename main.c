@@ -6,39 +6,36 @@
 #define MAX_USERNAME 10
 #define MAX_PWD 10
 
-typedef struct {
+struct User {
 int code;
 char fullName[20];
 char username[MAX_USERNAME];
 char password[MAX_PWD];
 
-}login;
+};
 
 void error_msg(char *msg);
 bool is_file_empty(FILE *file);
-void create_user(login login , FILE * file_append);
-bool user_login(login login , FILE * file_read);
+void create_user(FILE * file_append);
+bool login(FILE * file_read);
 int read_int (char * msg);
 
 int main(void){
 
-    char *file_name="login";
+    char *file_name="db.dat";
     FILE *file_append=fopen(file_name,"ab");
     FILE *file_read=fopen(file_name,"rb");
     if (file_append == NULL || file_read == NULL ){
      error_msg("file processing failed");
     }
-    login login;
-    //char username[MAX_USERNAME],password[MAX_PWD];
     int option;
-
     //Main Menu
     printf("\t \t \t \t Login System \n");
     do{
     option=read_int("\t \t (1) Create User \t (2) Login \t  (3) Exit \n");
     if(option == 1){
     //Create User
-    create_user(login ,file_append);
+    create_user(file_append);
     }
     else if(option == 2){
     //Login
@@ -46,7 +43,7 @@ int main(void){
         printf("No accounts Yet , Create one ! \n");
         continue;
     }
-    bool user_found = user_login(login ,file_read);
+    bool user_found = login(file_read);
     if (user_found) {
         printf("Login succses , welcome\n");
         option = 3;
@@ -84,19 +81,21 @@ bool is_file_empty(FILE *file) {
     return size == 0;
 }
 
-void create_user(login login , FILE * file_append){
-    login.code=read_int("Enter code : \n");
+void create_user(FILE * file_append){
+    struct User u;
+    u.code=read_int("Enter code : \n");
     printf("Full name : \n");
-    fgets(login.fullName,sizeof(login.fullName),stdin);
+    fgets(u.fullName,sizeof(u.fullName),stdin);
     printf("Username :  \n");
-    fgets(login.username,sizeof(login.username),stdin);
+    fgets(u.username,sizeof(u.username),stdin);
     printf("Password :  \n");
-    fgets(login.password,sizeof(login.password),stdin);
-    fwrite(&login, sizeof(login) , 1 , file_append);
+    fgets(u.password,sizeof(u.password),stdin);
+    fwrite(&u, sizeof(u) , 1 , file_append);
     printf("New account created\n");
 }
 
-bool user_login(login login , FILE * file_read){
+bool login(FILE * file_read){
+    struct User u;
     char username[MAX_USERNAME],password[MAX_PWD];
     printf("Login \n");
     printf("Enter username : ");
@@ -105,17 +104,16 @@ bool user_login(login login , FILE * file_read){
     fgets(password,sizeof(password),stdin);
     int found=0;
    rewind(file_read);
-    while(fread(&login, sizeof(login) , 1 , file_read)){
+    while(fread(&u, sizeof(u) , 1 , file_read)){
     //check if username found
-    if(strcmp(username,login.username)== 0){
+    if(strcmp(username,u.username)== 0){
     //check if password correct
-    if(strcmp(password,login.password)== 0){
+    if(strcmp(password,u.password)== 0){
     found=1;
     break;
     }
     }
     }
-    
     return found == 1;
 }
 

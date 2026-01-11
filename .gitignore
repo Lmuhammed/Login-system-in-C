@@ -1,7 +1,7 @@
+*.dat
 LoginSystem
 *.o
 *.obj
 *.elf
 *.out
 Mkfile.old
-db.dat

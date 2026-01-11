@@ -18,13 +18,12 @@ char password[MAX_PWD];
 void error_msg(char *msg);
 bool is_file_empty(FILE *file);
 void create_user(FILE * file);
-bool login(FILE * file);
+bool login(FILE * file,struct User *u);
 int read_int (char * msg);
 int generate_id (void);
 bool is_id_unique(int id,FILE * file);
 
 int main(void){
-
     char *file_name="db.dat";
     FILE *file = fopen(file_name, "ab+");
     if (file == NULL ){
@@ -45,9 +44,10 @@ int main(void){
         printf("No accounts Yet , Create one ! \n");
         continue;
     }
-    bool user_found = login(file);
+    struct User u;
+    bool user_found = login(file,&u);
     if (user_found) {
-        printf("Login succses , welcome\n");
+        printf("Login succses , welcome %s\n",u.fullName);
         option = 3;
     }else {
     printf("No account found\n");
@@ -103,20 +103,19 @@ void create_user(FILE * file){
     printf("New account created\n");
 }
 
-bool login(FILE * file){
-    struct User u;
+bool login(FILE * file,struct User *u){
+    rewind(file);
     char username[MAX_USERNAME],password[MAX_PWD];
     printf("Login \n Enter username : ");
     fgets(username,sizeof(username),stdin);
     printf("Enter Password : ");
     fgets(password,sizeof(password),stdin);
     int found=0;
-    rewind(file);
-    while(fread(&u, sizeof(u) , 1 , file)){
+    while(fread(u, sizeof(struct User) , 1 , file)){
     //check if username found
-    if(strcmp(username,u.username)== 0){
+    if(strcmp(username,u->username)== 0){
     //check if password correct
-    if(strcmp(password,u.password)== 0){
+    if(strcmp(password,u->password)== 0){
     found=1;
     break;
     }

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
+#include <sys/stat.h>
 
 #define MAX_USERNAME 10
 #define MAX_PWD 10
@@ -16,7 +17,7 @@ char password[MAX_PWD];
 };
 
 void error_msg(char *msg);
-bool is_file_empty(FILE *file);
+bool is_file_empty(char *filename);
 void create_user(FILE * file);
 bool login(FILE * file,struct User *u);
 int read_int (char * msg);
@@ -40,7 +41,7 @@ int main(void){
     }
     else if(option == 2){
     //Login
-    if (is_file_empty(file)) {
+    if (is_file_empty(file_name)) {
         printf("No accounts Yet , Create one ! \n");
         continue;
     }
@@ -71,15 +72,11 @@ void error_msg(char *msg){
     exit(-1);
 }
 
-bool is_file_empty(FILE *file) {
-    if (file == NULL) {
-        perror("Error opening file");
-        return -1; 
-    }
-    fseek(file, 0, SEEK_END); 
-    long size = ftell(file); 
-
-    return size == 0;
+bool is_file_empty(char *filename) {
+ struct stat file_status;
+ if (stat(filename,&file_status) < 0)
+ exit (-1);
+    return file_status.st_size == 0;
 }
 
 void create_user(FILE * file){

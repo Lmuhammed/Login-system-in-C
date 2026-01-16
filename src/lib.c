@@ -4,68 +4,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <sys/stat.h>
-
-#define MAX_USERNAME 10
-#define MAX_PWD 10
-
-struct User {
-int id;
-char fullName[20];
-char username[MAX_USERNAME];
-char password[MAX_PWD];
-
-};
-
-void error_msg(char *msg);
-bool is_file_empty(char *filename);
-void create_user(FILE * file);
-bool login(FILE * file,struct User *u);
-int read_int (char * msg);
-int generate_id (void);
-bool is_id_unique(int id,FILE * file);
-
-int main(void){
-    char *file_name="db.dat";
-    FILE *file = fopen(file_name, "ab+");
-    if (file == NULL ){
-     error_msg("file processing failed");
-    }
-    int option;
-    //Main Menu
-    printf("\t \t \t \t Login System \n");
-    do{
-    option=read_int("\t \t (1) Create User \t (2) Login \t  (3) Exit \n");
-    if(option == 1){
-    //Create User
-    create_user(file);
-    }
-    else if(option == 2){
-    //Login
-    if (is_file_empty(file_name)) {
-        printf("No accounts Yet , Create one ! \n");
-        continue;
-    }
-    struct User u;
-    bool user_found = login(file,&u);
-    if (user_found) {
-        printf("Login succses , welcome %s\n",u.fullName);
-        option = 3;
-    }else {
-    printf("No account found\n");
-    continue;
-    }
-    }
-
-    else if(option == 3){
-	printf("Quiting ... \n");
-	}
-	else 
-	printf("Non valid option , please chose 1,2,3 \n");
-	}while (option != 3);
-    fclose(file);
-
-return 0;
-}
+#include "../include/lib.h"
 
 void error_msg(char *msg){
     fprintf(stderr,"ERROR : %s",msg);
@@ -156,5 +95,4 @@ bool is_id_unique(int id,FILE * file){
     }
     return found == 0;
 }
-
 

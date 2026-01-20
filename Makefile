@@ -2,13 +2,14 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -std=c99
 
 TARGET = LoginSystem
-SRC = ./src/main.c
-SRC1 = ./src/lib.c
+MAIN = ./src/main.c
+USER = ./src/user.c
+HELPERS = ./src/helpers.c
 
 all: $(TARGET)
 
 $(TARGET): $(SRC)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRC) $(SRC1)
+	$(CC) $(CFLAGS) -o $(TARGET) $(MAIN) $(USER) $(HELPERS)
 
 run: $(TARGET)
 	./$(TARGET)

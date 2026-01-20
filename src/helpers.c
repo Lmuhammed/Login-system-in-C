@@ -4,10 +4,11 @@
 #include <stdbool.h>
 #include <time.h>
 #include <sys/stat.h>
+#include <string.h>
 #include "../include/helpers.h"
 
 void error_msg(char *msg){
-    fprintf(stderr,"ERROR : %s",msg);
+    fprintf(stderr,"ERROR : %s\n",msg);
     exit(-1);
 }
 
@@ -54,3 +55,16 @@ bool is_id_unique(int id,FILE * file){
     return found == 0;
 }
 
+bool is_username_unique(char * username,FILE * file){
+ int found=0;
+ struct User u;
+ rewind(file);
+ while(fread(&u, sizeof(u) , 1 , file)){
+	 int res=strncmp(username,u.username,MAX_STRS);
+    if(res == 0){
+    found =1;
+    break;
+    }
+    }
+    return found == 0;
+}

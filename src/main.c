@@ -3,11 +3,15 @@
 #include "../include/user.h"
 
 
-int main(void){
+int main(int argc , char ** argv){
+    if(argc < 3){
+	printf("NO argc found:%s",argv[0]);
+	return -2;
+    }
     char *file_name="db.dat";
     FILE *file = fopen(file_name, "ab+");
     if (file == NULL ){
-     perror("Error :");
+     perror("Error ");
     }
     int option;
     //Main Menu
@@ -20,7 +24,7 @@ int main(void){
     }
     else if(option == 2){
     //Login
-    if (is_file_empty(file_name)) {
+    if (is_file_empty(file)) {
         printf("No accounts Yet , Create one ! \n");
         continue;
     }

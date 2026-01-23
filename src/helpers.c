@@ -11,7 +11,7 @@ void error_msg(char *msg){
     exit(-1);
 }
 
-bool is_file_empty(File * file ) {
+bool is_file_empty(FILE * file) {
     fseek(file,0,SEEK_END);
     int offset=ftell(file);
     return offset == 0;

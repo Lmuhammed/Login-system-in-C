@@ -11,7 +11,7 @@
 
 
 void error_msg(char *msg);
-bool is_file_empty(char *filename);
+bool is_file_empty(FILE * file);
 int read_int (char * msg);
 int generate_id (void);
 bool is_id_unique(int id,FILE * file);

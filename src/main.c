@@ -7,7 +7,7 @@ int main(void){
     char *file_name="db.dat";
     FILE *file = fopen(file_name, "ab+");
     if (file == NULL ){
-     error_msg("file processing failed");
+     perror("Error :");
     }
     int option;
     //Main Menu

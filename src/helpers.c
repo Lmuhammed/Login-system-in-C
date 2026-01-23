@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
-#include <sys/stat.h>
 #include <string.h>
 #include "../include/helpers.h"
 
@@ -12,11 +11,10 @@ void error_msg(char *msg){
     exit(-1);
 }
 
-bool is_file_empty(char *filename) {
- struct stat file_status;
- if (stat(filename,&file_status) < 0)
- exit (-1);
-    return file_status.st_size == 0;
+bool is_file_empty(File * file ) {
+    fseek(file,0,SEEK_END);
+    int offset=ftell(file);
+    return offset == 0;
 }
 
 int read_int (char * msg){

@@ -7,7 +7,6 @@
 #include "../include/globals.h"
 #include "../include/helpers.h"
 
-void create_user(FILE * file);
-bool login(FILE * file,struct User *u);
-
+void create_user(FILE * file,char *fullName,char *username);
+bool login(FILE *file,struct User *u,char *username,char *password);
 #endif

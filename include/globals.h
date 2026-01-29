@@ -11,7 +11,5 @@ char password[MAX_STRS];
 
 };
 
-
-
 #endif
 

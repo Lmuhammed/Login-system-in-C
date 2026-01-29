@@ -8,5 +8,5 @@
 #include "../include/helpers.h"
 
 void create_user(FILE * file,char *fullName,char *username);
-bool login(FILE *file,struct User *u,char *username,char *password);
+bool login(FILE *file,struct User *u,char *username);
 #endif

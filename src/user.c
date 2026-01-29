@@ -32,7 +32,7 @@ void create_user(FILE * file,char *fullName,char *username){
     error_msg("Username used , chose another one please");
 }
 
-bool login(FILE *file,struct User *u,char *username,char *password){
+bool login(FILE *file,struct User *u,char *username){
     rewind(file);
     int found=0;
     char pwd[MAX_STRS]={0};
@@ -45,11 +45,11 @@ bool login(FILE *file,struct User *u,char *username,char *password){
     pwd[pwd_len - 1] = '\0';
 
     while(fread(u, sizeof(struct User) , 1 , file)){
-    printf ("usr : '%s'\n",u->username);
-    printf ("userArgv : '%s'\n",username);
+   // printf ("usr : '%s'\n",u->username);
+   // printf ("userArgv : '%s'\n",username);
     if(strcmp(u->username,username)== 0){
     //check if password correct
-    if(strcmp(u->password,password)== 0){
+    if(strcmp(u->password,pwd)== 0){
     found=1;
     break;
     }

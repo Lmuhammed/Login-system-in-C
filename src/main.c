@@ -10,8 +10,8 @@ int main(int argc , char **argv){
     char *create_user_long_version ="--create-user";
     char *create_user_short_version ="-CU";
 
-    if(argc < 4){
-	printf("NO argc found:%s",argv[0]);
+    if(argc < 3){// argv[0] <action> username password will be added
+	printf("NO argc found:%s\n",argv[0]);
 	return -2;
     }
     char *file_name="db.dat";
@@ -20,29 +20,40 @@ int main(int argc , char **argv){
      perror("Error ");
     }
 
-    else if(argc == 4){// argv[0] <action> username password will be added
-    //create login
-    if(strncmp(login_long_version , argv[1] ,MAX_STRS ) == 0 || strncmp(login_short_version,argv[1],MAX_STRS ) == 0){
+    // login
+    if(strncmp(login_long_version , argv[1] ,MAX_STRS ) == 0 || 
+       strncmp(login_short_version,argv[1],MAX_STRS ) == 0){
+
     if (is_file_empty(file)) {
-        printf("No accounts Yet , Create one ! \n");
+    	printf("No accounts Yet , Create one ! \n");
         return -3;
+
     }
+
     struct User u;
-    bool user_found = login(file,&u,argv[2],argv[3]);
+    bool user_found = login(file,&u,argv[2]);
     if (user_found) {
-        printf("Login succses , welcome %s\n",u.fullName);
+    	printf("Login succses , welcome %s\n",u.fullName);
     }else
-    printf("No account found\n");
- }
+    	printf("No account found\n");
+    }
+
     //create user
-    else if(strncmp(create_user_long_version , argv[1] ,MAX_STRS ) == 0 || strncmp(create_user_short_version,argv[1],MAX_STRS ) == 0){
-    create_user(file,argv[2],argv[3]);
- return -3;
+    else if(strncmp(create_user_long_version , argv[1] ,MAX_STRS ) == 0 ||
+            strncmp(create_user_short_version,argv[1],MAX_STRS ) == 0){
+
+	create_user(file,argv[2],argv[3]);
+	return -3;
 
     }
-       fclose(file);
 
+    //invalid option
+    else{
+    fprintf(stderr,"%s : invalid option -> '%s' \n",argv[0],argv[1]);
+    return -5;
     }
+    fclose(file);
+
 
 return 0;
 }

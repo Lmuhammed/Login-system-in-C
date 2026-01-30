@@ -6,10 +6,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
-#include <sys/stat.h>
 #include "../include/globals.h"
 
-
+int getch();
+void read_password(char arr[],int arr_size);
 void error_msg(char *msg);
 bool is_file_empty(FILE * file);
 int read_int (char * msg);

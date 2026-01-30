@@ -4,7 +4,46 @@
 #include <stdbool.h>
 #include <time.h>
 #include <string.h>
+#include <unistd.h>
+#include <termios.h>
 #include "../include/helpers.h"
+//thanks to https://dev.to/namantam1/how-to-take-hidden-password-from-terminal-in-cc-3ddd for getch() & read_password()
+
+int getch() {
+    int ch;
+    // struct to hold the terminal settings
+    struct termios old_settings, new_settings;
+    // take default setting in old_settings
+    tcgetattr(STDIN_FILENO, &old_settings);
+    // make of copy of it (Read my previous blog to know 
+    // more about how to copy struct)
+    new_settings = old_settings;
+    // change the settings for by disabling ECHO mode
+    // read man page of termios.h for more settings info
+    new_settings.c_lflag &= ~(ICANON | ECHO);
+    // apply these new settings
+    tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
+    // now take the input in this mode
+    ch = getchar();
+    // reset back to default settings
+    tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
+    return ch;
+}
+
+void read_password(char arr[],int arr_size){
+int i =0,ch;
+while ((ch = getch()) != '\n' && i < arr_size) {
+        if (ch == 127 || ch == 8) { // handle backspace
+            if (i != 0) {
+                i--;
+                printf("\b \b");
+            }
+        } else
+            arr[i++] = ch;
+    }
+    arr[i] = '\0';
+printf("\n");
+}
 
 void error_msg(char *msg){
     fprintf(stderr,"ERROR : %s\n",msg);

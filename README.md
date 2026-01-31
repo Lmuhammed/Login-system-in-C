@@ -6,3 +6,10 @@ structure :
 helpers.{h/c} : helper functions such as user id generation 
 
 user.{h/c}	  : user logic
+
+====
+run :
+
+make run ARGS="-CU 'ahmed ahmadi' ahmed6 "
+
+make run ARGS="-L ahmed6"

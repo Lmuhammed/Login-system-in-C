@@ -33,10 +33,9 @@ int getch() {
 void read_password(char arr[],int arr_size){
 int i =0,ch;
 while ((ch = getch()) != '\n' && i < arr_size) {
-        if (ch == 127 || ch == 8) { // handle backspace
+        if (ch == 127 || ch == 8) { // handle backspace 
             if (i != 0) {
                 i--;
-                printf("\b \b");
             }
         } else
             arr[i++] = ch;

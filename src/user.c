@@ -17,6 +17,11 @@ void create_user(FILE * file,char *fullName,char *username){
     //-1 ) username unique
     printf("Password : ");
     read_password(u.password, sizeof u.password);
+    if(strlen(u.password) < PWD_MIN_LENGTH || strlen(u.password) > MAX_STRS){
+        fprintf(stderr,"Invalide Password length , Expected length must be between %d and %d characters\n ",PWD_MIN_LENGTH,MAX_STRS);
+	exit(-1);
+	
+    }
     fwrite(&u, sizeof(u) , 1 , file);
     fflush(file);
     rewind(file);
